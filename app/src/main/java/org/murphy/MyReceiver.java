@@ -5,7 +5,6 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.speech.tts.TextToSpeech;
-import android.widget.TextView;
 
 import java.util.Objects;
 
@@ -20,9 +19,14 @@ public class MyReceiver extends BroadcastReceiver
     {
         if (Objects.equals(intent.getAction(), "android.intent.action.BOOT_COMPLETED"))
         {
-            Intent i = new Intent(context, MainActivity.class);
-            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(i);
+            Intent intent1 = new Intent(context , MyService.class);
+            // 启动指定Server
+            context.startService(intent1);
+        }else if (Objects.equals(intent.getAction(), "android.net.wifi.WIFI_STATE_CHANGED"))
+        {
+            Intent intent1 = new Intent(context , MyService.class);
+            // 启动指定Server
+            context.startService(intent1);
         }
     }
 }
