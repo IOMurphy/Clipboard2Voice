@@ -1,12 +1,8 @@
 package org.murphy;
 
 import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.BatteryManager;
 import android.os.IBinder;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
@@ -29,7 +25,6 @@ public class MyService extends Service implements TextToSpeech.OnInitListener {
     {
         mTextToSpeech = new TextToSpeech(this, this);
         registerClipEvents();
-        System.out.println("service create");
     }
 
     /**
@@ -58,7 +53,7 @@ public class MyService extends Service implements TextToSpeech.OnInitListener {
      * @param text
      */
     public void speak(CharSequence text) {
-        if (mTextToSpeech != null && !mTextToSpeech.isSpeaking()) {
+        if (!mTextToSpeech.isSpeaking()) {
 //            Bundle bundle = new Bundle();
 //            bundle.putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME,1.0f);
             //朗读，注意这里三个参数的added in API level 4   四个参数的added in API level 21
@@ -82,8 +77,10 @@ public class MyService extends Service implements TextToSpeech.OnInitListener {
             if (result == TextToSpeech.LANG_MISSING_DATA
                     || result == TextToSpeech.LANG_NOT_SUPPORTED){
                 Toast.makeText(this, "请设置Google TTS", Toast.LENGTH_LONG).show();
-            }else{
+            }else if(result > 0){
                 Toast.makeText(this, "初始化成功，请将软件加到保护名单里面，不然会被杀掉！", Toast.LENGTH_LONG).show();
+            }else{
+                Toast.makeText(this, "未知错误，状态码为：" + status, Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -96,6 +93,8 @@ public class MyService extends Service implements TextToSpeech.OnInitListener {
         super.onDestroy();
         if (mClipboardManager != null && mOnPrimaryClipChangedListener != null) {
             mClipboardManager.removePrimaryClipChangedListener(mOnPrimaryClipChangedListener);
+            mClipboardManager = null;
         }
+        mTextToSpeech = null;
     }
 }
