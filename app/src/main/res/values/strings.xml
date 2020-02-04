@@ -1,3 +1,13 @@
 <resources>
-    <string name="app_name">Clipboard2Voice</string>
+    <string name="app_name">Illiterate Speech</string>
+    <string name="set_TTS">Please Set Google TTS</string>
+    <string name="initialization_succeessful">Initialization successful</string>
+    <string name="unknow_error_and_staus_code_is">Unknown error and status code is </string>
+    <string name="text_to_speak_is_not_work_properly">text to speak is not work properly</string>
+    <string name="please_input_speech_rate">please input speech rate(default to 1.2)</string>
+    <string name="please_input_speech_pitch">please input speech pitch(default to 1.2)</string>
+    <string name="apply">apply</string>
+    <string name="please_input_origin">please input your language</string>
+    <string name="test">test</string>
+    <string name="OK">OK</string>
 </resources>
