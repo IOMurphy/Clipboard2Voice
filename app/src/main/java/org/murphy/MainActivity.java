@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity{
     private EditText editPitch;
     private Button testBt;
     private Button applyBt;
+    private Button repeatBt;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity{
         editPitch = findViewById(R.id.editPitch);
         testBt = findViewById(R.id.testBt);
         applyBt = findViewById(R.id.applyBt);
+        repeatBt = findViewById(R.id.repeatBt);
         Intent startIntent = new Intent(MainActivity.this, MyService.class);
         //startService启动形式
         startService(startIntent);
@@ -65,26 +67,31 @@ public class MainActivity extends AppCompatActivity{
                 Toast.makeText(MainActivity.this, R.string.OK, Toast.LENGTH_LONG).show();
             }
         });
+        repeatBt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boardCastClipBoard();
+            }
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
-            boardCastClipBoard();
-        }
+        boardCastClipBoard();
     }
 
     /**
      * 广播剪切板内容
      */
     private void boardCastClipBoard() {
-        Intent intent = new Intent();
-        intent.setAction(CustomizeActionConst.ORG_MURPHY_IN_FOCUS_SEND_MESSAGE_ACTION);
-        // 设置接收的receiver的路径
-        intent.setComponent(new ComponentName(MyReceiver.class.getPackage().getName(), MyReceiver.class.getName()));
-        sendBroadcast(intent);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+            Intent intent = new Intent();
+            intent.setAction(CustomizeActionConst.ORG_MURPHY_IN_FOCUS_SEND_MESSAGE_ACTION);
+            // 设置接收的receiver的路径
+            intent.setComponent(new ComponentName(MyReceiver.class.getPackage().getName(), MyReceiver.class.getName()));
+            sendBroadcast(intent);
+        }
     }
 
     public float getSpeechRate() {
