@@ -15,11 +15,9 @@ public class MyReceiver extends BroadcastReceiver
     {
         String action = intent.getAction();
 
-        if (Objects.equals(action, "android.intent.action.BOOT_COMPLETED"))
-        {
+        if (Objects.equals(action, "android.intent.action.BOOT_COMPLETED")) {
             startService(context);
-        }else if (Objects.equals(action, "android.net.wifi.WIFI_STATE_CHANGED")) //WIFI状态改变，包括一下两项
-        {
+        }else if (Objects.equals(action, "android.net.wifi.WIFI_STATE_CHANGED")){ //WIFI状态改变，包括一下两项
             startService(context);
         }if (Intent.ACTION_SCREEN_ON.equals(action)) { // 开屏
             startService(context);
@@ -30,6 +28,8 @@ public class MyReceiver extends BroadcastReceiver
         } else if (Objects.equals(intent.getAction(), WifiManager.NETWORK_STATE_CHANGED_ACTION)) {//wifi连接上与否
             startService(context);
         } else if (WifiManager.WIFI_STATE_CHANGED_ACTION.equals(intent.getAction())) {//wifi打开与否
+            startService(context);
+        } else if (CustomizeActionConst.ORG_MURPHY_IN_FOCUS_SEND_MESSAGE_ACTION.equals(intent.getAction())){ // 在焦点内
             startService(context);
         }
     }

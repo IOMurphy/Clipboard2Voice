@@ -1,10 +1,12 @@
 package org.murphy;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -63,6 +65,26 @@ public class MainActivity extends AppCompatActivity{
                 Toast.makeText(MainActivity.this, R.string.OK, Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+            boardCastClipBoard();
+        }
+    }
+
+    /**
+     * 广播剪切板内容
+     */
+    private void boardCastClipBoard() {
+        Intent intent = new Intent();
+        intent.setAction(CustomizeActionConst.ORG_MURPHY_IN_FOCUS_SEND_MESSAGE_ACTION);
+        // 设置接收的receiver的路径
+        intent.setComponent(new ComponentName(MyReceiver.class.getPackage().getName(), MyReceiver.class.getName()));
+        sendBroadcast(intent);
     }
 
     public float getSpeechRate() {

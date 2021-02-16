@@ -22,6 +22,22 @@ public class MyService extends Service implements ClipboardManager.OnPrimaryClip
 
 
     /**
+     * 用于焦点恢复时（进入app时读取剪切板）
+     * @param intent
+     * @param flags
+     * @param startId
+     * @return
+     */
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+
+        if(mClipboardManager != null){
+            onPrimaryClipChanged();
+        }
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+    /**
      * TTS Init Listener
      */
     private TextToSpeech.OnInitListener listener = new TextToSpeech.OnInitListener() {
