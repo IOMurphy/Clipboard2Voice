@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.murphy">
-
+    package="org.iomurphy">
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
         android:installLocation="internalOnly"
         android:allowBackup="true"
@@ -9,8 +11,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        android:theme="@style/AppTheme"
+        android:fullBackupContent="true">
+        <activity android:name="io.github.iomurphy.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -18,7 +21,7 @@
             </intent-filter>
         </activity>
         <receiver
-            android:name=".MyReceiver"
+            android:name="io.github.iomurphy.receiver.AutoBootReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter android:priority="1000">
@@ -27,14 +30,9 @@
                 <action android:name="android.net.wifi.RSSI_CHANGED"/>
                 <action android:name="android.net.wifi.STATE_CHANGE"/>
                 <action android:name="android.net.wifi.WIFI_STATE_CHANGED"/>
-                <action android:name="org.murphy.in.focus.send.message"/>
             </intent-filter>
         </receiver>
-        <service android:name=".MyService">
+        <service android:name="io.github.iomurphy.service.TTSService">
         </service>
     </application>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
 </manifest>

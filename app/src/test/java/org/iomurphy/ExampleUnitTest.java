@@ -1,4 +1,4 @@
-package org.murphy;
+package org.iomurphy;
 
 import org.junit.Test;
 

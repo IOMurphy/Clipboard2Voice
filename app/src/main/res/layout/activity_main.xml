@@ -6,65 +6,79 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="20dp"
-    tools:context=".MainActivity">
+    tools:context="io.github.iomurphy.MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text="@string/speech_rate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:id="@+id/editRate"
+            android:layout_marginStart="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="2"
+            android:inputType="numberDecimal" />
+    </LinearLayout>
 
 
-    <EditText
-        android:id="@+id/editRate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/please_input_speech_rate"
-        android:inputType="numberDecimal" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/origin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="@string/please_input_origin"
-        android:inputType="numberDecimal"/>
+        <TextView
+            android:text="@string/speech_pitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:id="@+id/editPitch"
+            android:layout_marginStart="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="2"
+            android:inputType="numberDecimal"/>
+    </LinearLayout>
 
-    <EditText
-        android:id="@+id/editPitch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/please_input_speech_pitch"
-        android:inputType="numberDecimal"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text="@string/language_origin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Spinner
+            android:id="@+id/localeSpinner"
+            android:layout_marginStart="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </Spinner>
+    </LinearLayout>
+
 
     <Button
+        android:layout_marginTop="20dp"
         android:id="@+id/applyBt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/apply"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.222"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.759" />
+        android:layout_gravity="center"
+        android:text="@string/apply"/>
 
-    <Button
-        android:id="@+id/testBt"
+    <ImageButton
+        android:layout_marginTop="20dp"
+        android:id="@+id/repeatBt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/test"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.631"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.759" />
-
-    <LinearLayout
-        android:layout_marginTop="80dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <Button
-            android:id="@+id/repeatBt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/repeat"/>
-
-    </LinearLayout>
+        android:text="@string/repeat"
+        android:layout_gravity="center"
+        android:src="@android:drawable/ic_lock_silent_mode_off"
+        tools:src="@android:drawable/ic_lock_silent_mode_off" />
 </LinearLayout>

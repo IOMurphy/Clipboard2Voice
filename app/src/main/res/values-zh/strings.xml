@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="repeat">重读</string>
+    <string name="app_name">文字转语音</string>
+    <string name="set_TTS">请设置Google TTS</string>
+    <string name="initialization_succeessful">初始化成功</string>
+    <string name="unknow_error_and_staus_code_is">未知错误，错误码是</string>
+    <string name="text_to_speak_is_not_work_properly">TextToSpeeck工作不正常</string>
+    <string name="speech_rate">语速</string>
+    <string name="speech_pitch">语调</string>
+    <string name="apply">应用</string>
+    <string name="language_origin">语言</string>
+    <string name="test">测试</string>
+    <string name="OK">OK</string>
 </resources>

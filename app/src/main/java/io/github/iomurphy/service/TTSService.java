@@ -1,4 +1,4 @@
-package org.murphy;
+package io.github.iomurphy.service;
 
 import android.app.Service;
 import android.content.ClipboardManager;
@@ -10,11 +10,16 @@ import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.widget.Toast;
 
+import org.iomurphy.R;
+
 import java.util.Locale;
 import java.util.Objects;
 
-public class MyService extends Service implements ClipboardManager.OnPrimaryClipChangedListener{
-    private static final String LOG_TAG = MyService.class.getSimpleName();
+import io.github.iomurphy.MainActivity;
+import io.github.iomurphy.util.MyTextToSpeech;
+
+public class TTSService extends Service implements ClipboardManager.OnPrimaryClipChangedListener{
+    private static final String LOG_TAG = TTSService.class.getSimpleName();
     private ClipboardManager mClipboardManager;
     private MyTextToSpeech mTextToSpeech;
     // 不懂为什么会调用两次，暂时先这么写
@@ -48,7 +53,7 @@ public class MyService extends Service implements ClipboardManager.OnPrimaryClip
                 SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.class.getName(), Context.MODE_PRIVATE);
                 // 设置音调,1.0是常规， 大是女声，小是男声，1.2声音还不错！
                 float pitch = sharedPreferences.getFloat("pitch", 1.0f);
-                //设定语速 ，默认1.0正常语速
+                // 设定语速 ，默认1.0正常语速
                 float speechRate = sharedPreferences.getFloat("rate", 0.7f);
                 mTextToSpeech.setPitch(pitch);
                 mTextToSpeech.setSpeechRate(speechRate);
@@ -57,17 +62,17 @@ public class MyService extends Service implements ClipboardManager.OnPrimaryClip
                 Log.i(LOG_TAG, "TextToSpeech status is " + status);
                 if (result == TextToSpeech.LANG_MISSING_DATA
                         || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                    Toast.makeText(MyService.this, R.string.set_TTS, Toast.LENGTH_LONG).show();
+                    Toast.makeText(TTSService.this, R.string.set_TTS, Toast.LENGTH_LONG).show();
                 } else if (result > 0) {
                     if (mTextToSpeech.isSpeaking()) {
                         mTextToSpeech.stop();
                     }
                     mTextToSpeech.speak(TextToSpeech.QUEUE_FLUSH, null, "");
                 } else {
-                    Toast.makeText(MyService.this, R.string.unknow_error_and_staus_code_is + status, Toast.LENGTH_LONG).show();
+                    Toast.makeText(TTSService.this, R.string.unknow_error_and_staus_code_is + status, Toast.LENGTH_LONG).show();
                 }
             }else{
-                Toast.makeText(MyService.this, "Failed init, status code is " + status, Toast.LENGTH_LONG).show();
+                Toast.makeText(TTSService.this, "Failed init, status code is " + status, Toast.LENGTH_LONG).show();
             }
         }
     };
@@ -113,7 +118,7 @@ public class MyService extends Service implements ClipboardManager.OnPrimaryClip
             CharSequence content =
                     mClipboardManager.getPrimaryClip().getItemAt(0).getText();
             Log.d(LOG_TAG, "The content of clipboard: " + content);
-            mTextToSpeech = new MyTextToSpeech(MyService.this, listener, content);
+            mTextToSpeech = new MyTextToSpeech(TTSService.this, listener, content);
         }
     }
 

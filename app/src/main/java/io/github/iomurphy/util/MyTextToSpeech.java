@@ -1,4 +1,4 @@
-package org.murphy;
+package io.github.iomurphy.util;
 
 import android.content.Context;
 import android.os.Bundle;

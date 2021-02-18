@@ -1,4 +1,4 @@
-package org.murphy;
+package io.github.iomurphy.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -7,7 +7,10 @@ import android.net.wifi.WifiManager;
 
 import java.util.Objects;
 
-public class MyReceiver extends BroadcastReceiver
+import io.github.iomurphy.constants.ActionConst;
+import io.github.iomurphy.service.TTSService;
+
+public class AutoBootReceiver extends BroadcastReceiver
 {
 
     @Override
@@ -29,13 +32,13 @@ public class MyReceiver extends BroadcastReceiver
             startService(context);
         } else if (WifiManager.WIFI_STATE_CHANGED_ACTION.equals(intent.getAction())) {//wifi打开与否
             startService(context);
-        } else if (CustomizeActionConst.ORG_MURPHY_IN_FOCUS_SEND_MESSAGE_ACTION.equals(intent.getAction())){ // 在焦点内
+        } else if (ActionConst.IOMURPHY_IN_FOCUS_SEND_MESSAGE_ACTION.equals(intent.getAction())){ // 在焦点内
             startService(context);
         }
     }
     public void startService(Context context){
 
-        Intent intent = new Intent(context , MyService.class);
+        Intent intent = new Intent(context , TTSService.class);
         // 启动指定Server
         context.startService(intent);
     }
