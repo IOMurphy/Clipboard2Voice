@@ -8,6 +8,7 @@ import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.widget.Toast;
 
+
 import java.util.Locale;
 import java.util.Objects;
 
@@ -82,10 +83,10 @@ public class TTSService extends Service implements ClipboardManager.OnPrimaryCli
             // 放在这里是为了在更改之后可以看到效果
             float speechRate = SharedPreferencesUtil.getSpeechRate(this);
             float pitch = SharedPreferencesUtil.getPitch(this);
-            String locale = SharedPreferencesUtil.getLocale(this);
+            Locale locale = Locale.forLanguageTag(SharedPreferencesUtil.getLocale(this));
             TTSEngine instance = TTSEngine.getInstance(this);
             if (instance != null) {
-                int code = instance.speak(content, speechRate, pitch, Locale.forLanguageTag(locale));
+                int code = instance.speak(content, speechRate, pitch, locale);
                 if (code == TextToSpeech.ERROR) {
                     Toast.makeText(this, "Failed to speak, code is " + code + ".", Toast.LENGTH_SHORT).show();
                 }

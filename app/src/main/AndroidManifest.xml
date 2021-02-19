@@ -35,4 +35,10 @@
         <service android:name="io.github.iomurphy.service.TTSService">
         </service>
     </application>
+    <!-- for android 11-->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.TTS_SERVICE" />
+        </intent>
+    </queries>
 </manifest>
