@@ -10,9 +10,7 @@ import java.util.Locale;
 
 public class TTSEngine extends TextToSpeech {
 
-    // TODO memory leak
     private static TTSEngine INSTANCE = null;
-    private final Context context;
 
 
     private Integer STATUS = UN_INITIALIZE;
@@ -22,7 +20,6 @@ public class TTSEngine extends TextToSpeech {
 
     public TTSEngine(Context context, OnInitListener listener) {
         super(context, listener);
-        this.context = context;
     }
 
 
@@ -48,20 +45,42 @@ public class TTSEngine extends TextToSpeech {
         return INSTANCE;
     }
 
+    /**
+     * 关闭
+     */
+    public static void shutdownNow() {
+        synchronized (TTSEngine.class) {
+            if (INSTANCE != null) {
+                INSTANCE.shutdown();
+            }
+        }
+    }
 
-    @Override
-    public int speak(CharSequence text, int queueMode, Bundle params, String utteranceId) {
+    /**
+     * 说话
+     *
+     * @param text
+     * @param speechRate
+     * @param pitch
+     * @param locale
+     * @return
+     */
+    public int speak(CharSequence text, float speechRate, float pitch, Locale locale) {
         // 防止未初始化完成
         synchronized (TTSEngine.class) {
             // 放在这里是为了在更改之后可以看到效果
-            setSpeechRate(SharedPreferencesUtil.getSpeechRate(context));
-            setPitch(SharedPreferencesUtil.getPitch(context));
-            setLanguage(Locale.forLanguageTag(SharedPreferencesUtil.getLocale(context)));
+            setSpeechRate(speechRate);
+            setPitch(pitch);
+            setLanguage(locale);
         }
-        if(STATUS.equals(SUCCESS)) {
+        return speak(text, TextToSpeech.QUEUE_FLUSH, null, "");
+    }
+
+    @Override
+    public int speak(CharSequence text, int queueMode, Bundle params, String utteranceId) {
+        if (STATUS.equals(SUCCESS)) {
             return super.speak(text, queueMode, params, utteranceId);
-        }else{
-            Toast.makeText(context, "Failed init!", Toast.LENGTH_LONG).show();
+        } else {
             return ERROR;
         }
     }

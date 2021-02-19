@@ -2,32 +2,28 @@ package io.github.iomurphy.service;
 
 import android.app.Service;
 import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.widget.Toast;
 
-import org.iomurphy.R;
-
 import java.util.Locale;
 import java.util.Objects;
 
-import io.github.iomurphy.MainActivity;
-import io.github.iomurphy.util.MyTextToSpeech;
+import io.github.iomurphy.util.SharedPreferencesUtil;
+import io.github.iomurphy.util.TTSEngine;
 
-public class TTSService extends Service implements ClipboardManager.OnPrimaryClipChangedListener{
+public class TTSService extends Service implements ClipboardManager.OnPrimaryClipChangedListener {
     private static final String LOG_TAG = TTSService.class.getSimpleName();
     private ClipboardManager mClipboardManager;
-    private MyTextToSpeech mTextToSpeech;
     // 不懂为什么会调用两次，暂时先这么写
     private long lastTime = 0;
 
 
     /**
      * 用于焦点恢复时（进入app时读取剪切板）
+     *
      * @param intent
      * @param flags
      * @param startId
@@ -36,46 +32,11 @@ public class TTSService extends Service implements ClipboardManager.OnPrimaryCli
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        if(mClipboardManager != null){
+        if (mClipboardManager != null) {
             onPrimaryClipChanged();
         }
         return super.onStartCommand(intent, flags, startId);
     }
-
-    /**
-     * TTS Init Listener
-     */
-    private TextToSpeech.OnInitListener listener = new TextToSpeech.OnInitListener() {
-        @Override
-        public void onInit(int status) {
-
-            if (status == TextToSpeech.SUCCESS) {
-                SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.class.getName(), Context.MODE_PRIVATE);
-                // 设置音调,1.0是常规， 大是女声，小是男声，1.2声音还不错！
-                float pitch = sharedPreferences.getFloat("pitch", 1.0f);
-                // 设定语速 ，默认1.0正常语速
-                float speechRate = sharedPreferences.getFloat("rate", 0.7f);
-                mTextToSpeech.setPitch(pitch);
-                mTextToSpeech.setSpeechRate(speechRate);
-
-                int result = mTextToSpeech.setLanguage(Locale.CHINA);
-                Log.i(LOG_TAG, "TextToSpeech status is " + status);
-                if (result == TextToSpeech.LANG_MISSING_DATA
-                        || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                    Toast.makeText(TTSService.this, R.string.set_TTS, Toast.LENGTH_LONG).show();
-                } else if (result > 0) {
-                    if (mTextToSpeech.isSpeaking()) {
-                        mTextToSpeech.stop();
-                    }
-                    mTextToSpeech.speak(TextToSpeech.QUEUE_FLUSH, null, "");
-                } else {
-                    Toast.makeText(TTSService.this, R.string.unknow_error_and_staus_code_is + status, Toast.LENGTH_LONG).show();
-                }
-            }else{
-                Toast.makeText(TTSService.this, "Failed init, status code is " + status, Toast.LENGTH_LONG).show();
-            }
-        }
-    };
 
 
     @Override
@@ -93,7 +54,7 @@ public class TTSService extends Service implements ClipboardManager.OnPrimaryCli
      */
     private void registerClipEvents() {
         mClipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-        if(mClipboardManager == null){
+        if (mClipboardManager == null) {
             Toast.makeText(this, "Force close because of @Nullable clipboard manager.", Toast.LENGTH_LONG).show();
             throw new RuntimeException("Force close because of @Nullable clipboard manager.");
         }
@@ -118,7 +79,17 @@ public class TTSService extends Service implements ClipboardManager.OnPrimaryCli
             CharSequence content =
                     mClipboardManager.getPrimaryClip().getItemAt(0).getText();
             Log.d(LOG_TAG, "The content of clipboard: " + content);
-            mTextToSpeech = new MyTextToSpeech(TTSService.this, listener, content);
+            // 放在这里是为了在更改之后可以看到效果
+            float speechRate = SharedPreferencesUtil.getSpeechRate(this);
+            float pitch = SharedPreferencesUtil.getPitch(this);
+            String locale = SharedPreferencesUtil.getLocale(this);
+            TTSEngine instance = TTSEngine.getInstance(this);
+            if (instance != null) {
+                int code = instance.speak(content, speechRate, pitch, Locale.forLanguageTag(locale));
+                if (code == TextToSpeech.ERROR) {
+                    Toast.makeText(this, "Failed to speak, code is " + code + ".", Toast.LENGTH_SHORT).show();
+                }
+            }
         }
     }
 
@@ -128,12 +99,9 @@ public class TTSService extends Service implements ClipboardManager.OnPrimaryCli
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mClipboardManager != null ) {
+        if (mClipboardManager != null) {
             mClipboardManager = null;
         }
-        if (mTextToSpeech != null) {
-            mTextToSpeech.shutdown();
-            mTextToSpeech = null;
-        }
+        TTSEngine.shutdownNow();
     }
 }
