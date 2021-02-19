@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
          * 语调
          */
         editPitch = findViewById(R.id.editPitch);
-        float speechPitch = SharedPreferencesUtil.getSpeechPitch(this);
+        float speechPitch = SharedPreferencesUtil.getPitch(this);
         editPitch.setText(String.format("%s", speechPitch));
     }
 
@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
         applyBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferencesUtil.setSpeechPitch(MainActivity.this, getSpeechPitch());
+                SharedPreferencesUtil.setPitch(MainActivity.this, getSpeechPitch());
                 SharedPreferencesUtil.setSpeechRate(MainActivity.this, getSpeechRate());
                 Toast.makeText(MainActivity.this, R.string.OK, Toast.LENGTH_LONG).show();
             }

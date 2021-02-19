@@ -10,8 +10,10 @@ public class SharedPreferencesUtil {
     public static final String SPEECH_RATE = "rate";
     public static final String SPEECH_PITCH = "pitch";
     public static final String SPEECH_LANGUAGE = "language";
+
     /**
      * 设置tts速率
+     *
      * @param context
      * @param rate
      */
@@ -28,6 +30,7 @@ public class SharedPreferencesUtil {
 
     /**
      * 获得tts速率
+     *
      * @return
      */
     public static float getSpeechRate(Context context) {
@@ -37,10 +40,11 @@ public class SharedPreferencesUtil {
 
     /**
      * 设置声调
+     *
      * @param context
      * @param pitch
      */
-    public static void setSpeechPitch(Context context, float pitch) {
+    public static void setPitch(Context context, float pitch) {
         if (pitch == 0.0f) {
             return;
         }
@@ -53,16 +57,18 @@ public class SharedPreferencesUtil {
 
     /**
      * 获得声调
+     *
      * @param context
      * @return
      */
-    public static float getSpeechPitch(Context context) {
+    public static float getPitch(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.class.getName(), Context.MODE_PRIVATE);
         return sharedPreferences.getFloat(SPEECH_PITCH, 1.2f);
     }
 
     /**
      * 设置语言
+     *
      * @param context
      * @param locale
      */
@@ -76,6 +82,7 @@ public class SharedPreferencesUtil {
 
     /**
      * 获得语言
+     *
      * @param context
      * @return
      */
