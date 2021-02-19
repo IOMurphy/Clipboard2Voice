@@ -9,10 +9,23 @@ import java.util.Locale;
 
 public class TTSEngine extends TextToSpeech {
 
-    private static TTSEngine INSTANCE = null;
+    private volatile static TTSEngine INSTANCE = null;
 
+    /**
+     * 初始化失败
+     */
     public static final Integer FAILED = 1;
+    /**
+     * 尚未初始化
+     */
     public static final Integer UN_INITIALIZE = -1;
+    /**
+     * 初始化中
+     */
+    public static final Integer INITIALIZING = 2;
+    /**
+     * 初始化成功
+     */
     public static final Integer SUCCESS = 0;
 
     private static Integer status = UN_INITIALIZE;
@@ -23,14 +36,14 @@ public class TTSEngine extends TextToSpeech {
 
 
     public static synchronized TTSEngine getInstance(final Context context) {
-        if (INSTANCE == null || TTSEngine.status.equals(FAILED)) {
+        if (INSTANCE == null || TTSEngine.status.equals(FAILED) || TTSEngine.status.equals(INITIALIZING)) {
             synchronized (TTSEngine.class) {
                 if (INSTANCE == null || TTSEngine.status.equals(FAILED)) {
                     INSTANCE = new TTSEngine(context, new OnInitListener() {
                         @Override
                         public void onInit(int status) {
+                            // fixme 这里在#getInstance之后才回调不同步
                             if (status == TextToSpeech.SUCCESS) {
-                                // NPE
                                 TTSEngine.status = SUCCESS;
                             } else {
                                 TTSEngine.status = FAILED;
