@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * 广播剪切板内容
+     * 通过广播唤醒service
      */
     private void boardCastClipBoard() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {

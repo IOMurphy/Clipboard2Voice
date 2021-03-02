@@ -3,6 +3,7 @@ package io.github.iomurphy.service;
 import android.app.Service;
 import android.content.ClipboardManager;
 import android.content.Intent;
+import android.os.Build;
 import android.os.IBinder;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
@@ -47,19 +48,22 @@ public class TTSService extends Service implements ClipboardManager.OnPrimaryCli
 
     @Override
     public void onCreate() {
-        registerClipEvents();
+        initClipBoard();
     }
 
     /**
-     * 注册剪切板复制、剪切事件监听
+     * 初始化剪切板，监听复制、剪切事件
      */
-    private void registerClipEvents() {
+    private void initClipBoard() {
         mClipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
         if (mClipboardManager == null) {
             Toast.makeText(this, "Force close because of @Nullable clipboard manager.", Toast.LENGTH_LONG).show();
             throw new RuntimeException("Force close because of @Nullable clipboard manager.");
         }
-        mClipboardManager.addPrimaryClipChangedListener(this);
+        // 安卓q不注册
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            mClipboardManager.addPrimaryClipChangedListener(this);
+        }
     }
 
     /**
